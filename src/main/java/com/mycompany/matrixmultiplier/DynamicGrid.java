@@ -63,10 +63,24 @@ public class DynamicGrid extends JFrame{
         
         for(int i = 0; i < cubicsize; i++)
         {
-            int color = (int) 255 / (data[i] + 1);
+            
             label[i] = Model(data[i]);
+            
+            int color = 0, r=0,g=0,b=0;
+            if(data[i] <= 10)
+            {
+                color = 255 - (25 * data[i]);
+                r = color; g = color; b = color;
+            }
+//            else
+//            {
+//                r = (int) ((data[i] / 400.0) * 255);
+//                g = (int) ((1 - (data[i] / 400.0)) * 255);
+//                b = 0;
+//            }
+            
             label[i].setOpaque(true);
-            label[i].setBackground( new Color(color,color,color));
+            label[i].setBackground( new Color(r,g,b));
             grid.add(label[i]);
         }
         
