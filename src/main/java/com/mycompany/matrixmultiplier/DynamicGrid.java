@@ -11,28 +11,10 @@ import javax.swing.JScrollPane;
 
 public class DynamicGrid extends JFrame{
     
-    private int size, cubicsize;
-    private int[] data;
+    private int size;
     private int[][] dataMatrix;
+    private boolean isFinal = false;
     private JPanel grid;
-    
-    public DynamicGrid()
-    {
-        _setSize(20);
-        draw();
-    }
-    
-    public DynamicGrid(int size)
-    {
-        _setSize(size);
-        draw();
-    }
-    
-    public DynamicGrid(int[] data)
-    {
-        _setData(data);
-        draw();
-    }
     
     public DynamicGrid(int [][] dataMatrix)
     {
@@ -40,16 +22,11 @@ public class DynamicGrid extends JFrame{
         draw();
     }
     
-    private void draw_test()
+    public DynamicGrid(int [][] dataMatrix, boolean isFinal)
     {
-        setLayout(new GridLayout(size,size));
-        JLabel[] label = new JLabel[cubicsize];
-        
-        for(int i = 0; i < cubicsize; i++)
-        {
-            label[i] = Model(data[i]);
-            add(label[i]);
-        }
+        _setDataMatrix(dataMatrix);
+        _setIsFinal(isFinal);
+        draw();
     }
     
     private void draw()
@@ -59,29 +36,46 @@ public class DynamicGrid extends JFrame{
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        JLabel[] label = new JLabel[cubicsize];
+        JLabel[][] label = new JLabel[size][size];
         
-        for(int i = 0; i < cubicsize; i++)
+        for(int i = 0; i < size; i++)
         {
-            
-            label[i] = Model(data[i]);
-            
-            int color = 0, r=0,g=0,b=0;
-            if(data[i] <= 10)
-            {
-                color = 255 - (25 * data[i]);
-                r = color; g = color; b = color;
+            for(int j = 0; j < size; j++){
+                
+                label[i][j] = Model(dataMatrix[i][j]);
+
+                int color = 0;
+                int r = 0;
+                int g = 0;
+                int b = 0;
+
+                int aproxMax = size * 18;
+                
+                int aux = (dataMatrix[i][j] < 0) ? - dataMatrix[i][j] : dataMatrix[i][j];
+                aux = (aux > aproxMax) ? aproxMax : aux;
+                
+                if(!isFinal)
+                {
+                    color = 255 - (25 * aux);
+                    r = color; g = color; b = color;
+                }
+                else
+                {
+                    r = (int) (255 - (255 * aux / aproxMax));
+                    g = (int) (255 * aux / aproxMax);
+                    b = 0;
+                    
+                    if (dataMatrix[i][j] < 0) {
+                        label[i][j].setForeground(Color.white);
+                        b = r;
+                        r = g;
+                        g = 0;
+                    }
+                }
+                label[i][j].setOpaque(true);
+                label[i][j].setBackground( new Color(r,g,b));
+                grid.add(label[i][j]);
             }
-//            else
-//            {
-//                r = (int) ((data[i] / 400.0) * 255);
-//                g = (int) ((1 - (data[i] / 400.0)) * 255);
-//                b = 0;
-//            }
-            
-            label[i].setOpaque(true);
-            label[i].setBackground( new Color(r,g,b));
-            grid.add(label[i]);
         }
         
         getContentPane().add(scrollPane);
@@ -91,88 +85,25 @@ public class DynamicGrid extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
-    
+     
     public JLabel Model(int value)
     {
         JLabel model = new JLabel(" " + value + " ",JLabel.CENTER);
         model.setFont(new Font("Courier New", Font.ITALIC, 15));
-        //model.setSize(50, 50);
         model.setForeground(Color.blue);
         return model;
-    }
-    
-    public int _getSize(){ return size; }
-    public void _setSize(int size)
-    { 
-        this.size = size; 
-        this.cubicsize = (int) Math.pow(size,2);
-        this.data = new int[cubicsize];
-        this.dataMatrix = new int[size][size];
-        
-        randomizedValues();
-        
-    }
-    
-    public int[] _getData(){ return data; }
-    public void _setData(int[] data)
-    { 
-        this.data = data;
-        this.cubicsize = data.length;
-        this.size = (int) Math.sqrt(data.length);
-        this.dataMatrix = parser(data);
     }
     
     public int[][] _getDataMatrix() { return dataMatrix; }
     public void _setDataMatrix(int [][] dataMatrix)
     {
         this.dataMatrix = dataMatrix;
-        this.cubicsize = dataMatrix.length * dataMatrix[0].length;
         this.size = dataMatrix.length;
-        this.data = parser(dataMatrix);
     }
     
-    private void randomizedValues()
+    public boolean _getIsFinal(){ return isFinal; };
+    public void _setIsFinal(boolean isFinal)
     {
-        for(int i = 0; i < cubicsize; i++)
-        {
-            data[i] = (int) (Math.random() * 10);
-        }
-        
-        dataMatrix = parser(data);
-    }
-    
-    public int[][] parser(int[] value)
-    {
-        int value_size = (int) Math.sqrt(value.length);
-        int[][] exit = new int [value_size][value_size];
-        
-        int index = 0;
-        for(int i = 0; i < value_size; i++)
-        {
-            for(int j = 0; j < value_size; j++)
-            {
-                exit[i][j] = value[index];
-                index++;
-            }
-        }
-        
-        return exit;
-    }
-    public int[] parser(int [][] value)
-    {
-        int value_size = value.length * value[0].length;
-        int[] exit = new int[value_size];
-        
-        int index = 0;
-        for(int i = 0; i < value.length; i++)
-        {
-            for(int j = 0; j < value[0].length; j++)
-            {
-                exit[index] = value[i][j];
-                index++;
-            }
-        }
-        
-        return exit;
+        this.isFinal = isFinal;
     }
 }

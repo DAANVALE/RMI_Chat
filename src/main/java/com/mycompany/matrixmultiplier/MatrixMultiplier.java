@@ -1,43 +1,66 @@
 package com.mycompany.matrixmultiplier;
 
-public class MatrixMultiplier {
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
+import java.util.ArrayList;
 
-    private DynamicGrid grid;
+public class MatrixMultiplier {
     
     public static void main(String[] args) {
-        int size = 1000;
+        
+        MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage beforeHeapMemoryUsage = mbean.getHeapMemoryUsage();
+        
+        int size = 2000;
         int sizeGrid = 400;
-        DynamicGrid grid = new DynamicGrid(size);
-        grid.setTitle("Matriz");
-        grid.setSize(sizeGrid * 2,sizeGrid);
-        grid.setLocationRelativeTo(null);
-        grid.setDefaultCloseOperation(grid.EXIT_ON_CLOSE);
-        //grid.setVisible(true);
+        int[][] valor;
+                
+        valor = RandomiceMatrix.SetValues(size);
+        int[][] mult = Multiplier._multiplier(valor, valor);
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.print("cores:" + cores + "\n");
+
+        ArrayList<String> arrayList = new ArrayList<String>();
         
-        Multiplier mult = new Multiplier(grid._getDataMatrix(), grid._getDataMatrix());
-        int max = 0;
-        
-        System.out.print("[ \n");
-        for(int i = 0; i < mult.getGrid_3().length; i++)
-        {
-            System.out.print("{");
-            for(int j = 0; j < mult.getGrid_3()[0].length; j++)
+        for(int i = 0; i < size; i++){
+            if((i % 100) == 0)
             {
-                System.out.print(mult.getGrid_3()[i][j] + ", ");
-                if(max < mult.getGrid_3()[i][j])
-                {
-                    max = mult.getGrid_3()[i][j];
-                }
+                System.out.print((i / 100) + ": b\n");
             }
-            System.out.print("},\n");
+            arrayList.add("\n" + i + " {");
+            for(int j = 0; j < size; j++){
+                arrayList.add(Integer.toString(mult[i][j]));
+            }
+            arrayList.add("}");
         }
-        System.out.print("] \n " + max);
+        arrayList.add("\n");
         
-//        DynamicGrid grid2 = new DynamicGrid(mult.getGrid_3());
-//        grid2.setTitle("End");
+//        DynamicGrid grid1 = new DynamicGrid(valor, false);
+//        grid1.setTitle("Matriz");
+//        grid1.setSize(sizeGrid * 2,sizeGrid);
+//        grid1.setLocationRelativeTo(null);
+//        grid1.setDefaultCloseOperation(grid1.EXIT_ON_CLOSE);
+//        //grid1.setVisible(true);
+//        
+//        DynamicGrid grid2 = new DynamicGrid(valor, false);
+//        grid2.setTitle("Matriz");
 //        grid2.setSize(sizeGrid * 2,sizeGrid);
 //        grid2.setLocationRelativeTo(null);
-//        grid2.setDefaultCloseOperation(grid.EXIT_ON_CLOSE);
-//        grid2.setVisible(true);
+//        grid2.setDefaultCloseOperation(grid2.EXIT_ON_CLOSE);
+//        //grid2.setVisible(true);
+//        
+//        DynamicGrid grid3 = new DynamicGrid(mult, true);
+//        grid3.setTitle("Matriz");
+//        grid3.setSize(sizeGrid * 2,sizeGrid);
+//        grid3.setLocationRelativeTo(null);
+//        grid3.setDefaultCloseOperation(grid3.EXIT_ON_CLOSE);
+//        //grid3.setVisible(true);
+        
+       //System.out.print(arrayList + "\n");
+
+        MemoryUsage afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
+        long consumed =  afterHeapMemoryUsage.getUsed() - beforeHeapMemoryUsage.getUsed();
+        System.out.println("Total consumed Memory:" + consumed);
     }
 }
