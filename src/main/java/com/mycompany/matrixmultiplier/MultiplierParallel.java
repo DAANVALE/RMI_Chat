@@ -15,7 +15,7 @@ public class MultiplierParallel {
         try {
             for (int i = 0; i < grid1.length; i++) {
                 final int row = i;
-                Future<?> future = executorService.submit(() -> {
+                executorService.execute(() -> {
                     for (int j = 0; j < grid2[0].length; j++) {
                         int sum = 0;
                         for (int k = 0; k < grid2.length; k++) {

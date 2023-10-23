@@ -74,7 +74,7 @@ public class StarterMenu extends JFrame{
                 RUN_Calculation();
                 finalResults.setValues(value1, value2,value3);
                 finalResults.activateShow();
-                JOptionPane.showMessageDialog(null,menu.values());
+                JOptionPane.showMessageDialog(null,"Tam: " + MATRIX_SIZE + "\n" +menu.values());
             }
         });
         
@@ -91,15 +91,22 @@ public class StarterMenu extends JFrame{
     private void RUN_Calculation()
     {
         long startTime = 0, endTime = 0;
-        startTime = System.nanoTime();
-        value3 = Multiplier._multiplier(value1, value2);
-        endTime = System.nanoTime();
-        System.out.print("\nSecuencial\n\t" + (endTime - startTime));
         
-        startTime = System.nanoTime();
-        value3 = MultiplierParallel.multiply(value1, value2, menu.getTypeOf().numOfThreads);
-        endTime = System.nanoTime();
-        System.out.print("\nParalelo\n\t" + (endTime - startTime));
+        if(menu.getTypeOf().secuential)
+        {
+            startTime = System.nanoTime();
+            value3 = Multiplier._multiplier(value1, value2);
+            endTime = System.nanoTime();
+            System.out.print("\nSecuencial\n\t" + (endTime - startTime));
+        }
+        
+        if (menu.getTypeOf().parallel)
+        {
+            startTime = System.nanoTime();
+            value3 = MultiplierParallel.multiply(value1, value2, menu.getTypeOf().numOfThreads);
+            endTime = System.nanoTime();
+            System.out.print("\nParalelo\n\t" + (endTime - startTime));
+        }
     }
 
     public class SizeMatrixPanel extends JPanel {
@@ -116,7 +123,7 @@ public class StarterMenu extends JFrame{
 
         public int getSizeMatrix() {
             try {
-                return Integer.parseInt(textField.getText()) > 2 ? Integer.parseInt(textField.getText()) : 10;
+                return Integer.parseInt(textField.getText()) >= 2 ? Integer.parseInt(textField.getText()) : 10;
             } catch (NumberFormatException e) {
                 return 10;
             }
