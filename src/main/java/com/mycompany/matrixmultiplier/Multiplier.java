@@ -1,21 +1,22 @@
 package com.mycompany.matrixmultiplier;
 
+import java.util.concurrent.Future;
+
 public class Multiplier {    
     public static int[][] _multiplier(int[][] grid1, int[][] grid2)
     {
         int[][] grid3 = new int[grid1.length][grid2[0].length];
-        for(int i = 0; i < grid2.length; i++)
+        for (int i = 0; i < grid1.length; i++) 
         {
-            if((i % 100) == 0)
-                System.out.print((i / 100) + ": a\n");
-            for(int j = 0; j < grid2[0].length; j++)
-                {
-                int suma = 0;
+            final int row = i;
+            for (int j = 0; j < grid2[0].length; j++) 
+            {
+                int sum = 0;
                 for (int k = 0; k < grid2.length; k++) 
                 {
-                    suma += grid1[i][k] * grid2[k][j];
+                    sum += grid1[row][k] * grid2[k][j];
                 }
-                grid3[i][j] = suma;
+                grid3[row][j] = sum;
             }
         }
         return grid3;

@@ -12,7 +12,7 @@ public class MatrixMultiplier {
         MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
         MemoryUsage beforeHeapMemoryUsage = mbean.getHeapMemoryUsage();
         
-        int size = 2000;
+        int size = 100;
         int sizeGrid = 400;
         int[][] valor;
                 
@@ -40,25 +40,25 @@ public class MatrixMultiplier {
 //        grid1.setTitle("Matriz");
 //        grid1.setSize(sizeGrid * 2,sizeGrid);
 //        grid1.setLocationRelativeTo(null);
-//        grid1.setDefaultCloseOperation(grid1.EXIT_ON_CLOSE);
-//        //grid1.setVisible(true);
+//        grid1.setDefaultCloseOperation(DynamicGrid.DISPOSE_ON_CLOSE);
+//        grid1.setVisible(true);
 //        
 //        DynamicGrid grid2 = new DynamicGrid(valor, false);
 //        grid2.setTitle("Matriz");
 //        grid2.setSize(sizeGrid * 2,sizeGrid);
 //        grid2.setLocationRelativeTo(null);
-//        grid2.setDefaultCloseOperation(grid2.EXIT_ON_CLOSE);
-//        //grid2.setVisible(true);
+//        grid2.setDefaultCloseOperation(DynamicGrid.DISPOSE_ON_CLOSE);
+//        grid2.setVisible(true);
 //        
 //        DynamicGrid grid3 = new DynamicGrid(mult, true);
 //        grid3.setTitle("Matriz");
 //        grid3.setSize(sizeGrid * 2,sizeGrid);
 //        grid3.setLocationRelativeTo(null);
-//        grid3.setDefaultCloseOperation(grid3.EXIT_ON_CLOSE);
-//        //grid3.setVisible(true);
+//        grid3.setDefaultCloseOperation(DynamicGrid.DISPOSE_ON_CLOSE);
+//        grid3.setVisible(true);
         
        //System.out.print(arrayList + "\n");
-
+        
         MemoryUsage afterHeapMemoryUsage = mbean.getHeapMemoryUsage();
         long consumed =  afterHeapMemoryUsage.getUsed() - beforeHeapMemoryUsage.getUsed();
         System.out.println("Total consumed Memory:" + consumed);
