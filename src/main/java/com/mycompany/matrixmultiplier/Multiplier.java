@@ -1,7 +1,5 @@
 package com.mycompany.matrixmultiplier;
 
-import java.util.concurrent.Future;
-
 public class Multiplier {    
     public static int[][] _multiplier(int[][] grid1, int[][] grid2)
     {

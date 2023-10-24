@@ -3,7 +3,6 @@ package com.mycompany.matrixmultiplier;
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JFrame;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

@@ -2,8 +2,6 @@ package com.mycompany.matrixmultiplier;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 
 public class MultiplierParallel {
     public static int[][] multiply(int[][] grid1, int[][] grid2, int numOfThreads) 

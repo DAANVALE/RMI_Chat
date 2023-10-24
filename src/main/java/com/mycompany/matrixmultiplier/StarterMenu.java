@@ -30,6 +30,10 @@ public class StarterMenu extends JFrame{
     private int value1[][], value2[][], value3[][];
     private int MATRIX_SIZE = 10;
     
+    private boolean isREADTXTMATRIX = false;
+    
+    private JButton readMatrix;
+    
     public StarterMenu()
     {
         initialize();
@@ -83,13 +87,18 @@ public class StarterMenu extends JFrame{
     
     private void IgualizerValues()
     {
-        MATRIX_SIZE = sizeMatrixPanel.getSizeMatrix();
-        value1 = RandomiceMatrix.SetValues(MATRIX_SIZE);
-        value2 = RandomiceMatrix.SetValues(MATRIX_SIZE);
+        if(!isREADTXTMATRIX)
+        {
+            readMatrix.setBackground(null);
+            MATRIX_SIZE = sizeMatrixPanel.getSizeMatrix();
+            value1 = RandomiceMatrix.SetValues(MATRIX_SIZE);
+            value2 = RandomiceMatrix.SetValues(MATRIX_SIZE);
+        }
     }
     
     private void RUN_Calculation()
     {
+        isREADTXTMATRIX = false;
         long startTime = 0, endTime = 0;
         
         if(menu.getTypeOf().secuential)
@@ -116,17 +125,38 @@ public class StarterMenu extends JFrame{
         public SizeMatrixPanel() {
             label = new JLabel("Tamaño Matriz");
             textField = new JTextField(1);
+            readMatrix = ButtonReadMatrix();
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             add(label);
             add(textField);
+            add(readMatrix);
         }
 
         public int getSizeMatrix() {
             try {
-                return Integer.parseInt(textField.getText()) >= 2 ? Integer.parseInt(textField.getText()) : 10;
+                int size = Integer.parseInt(textField.getText()) >= 2 ? Integer.parseInt(textField.getText()) : 10;
+                return size > 5000 ? 5000 : size;
             } catch (NumberFormatException e) {
                 return 10;
             }
+        }
+        
+        public JButton ButtonReadMatrix()
+        {
+            JButton buttonReadMatrix = new JButton("Leer matriz");
+            buttonReadMatrix.setFocusable(false);
+            
+            buttonReadMatrix.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isREADTXTMATRIX = true;
+                readMatrix.setBackground(Color.CYAN);
+                value1 = ReadTxt.ReadFileTxt("Matrix_1.txt");
+                value2 = ReadTxt.ReadFileTxt("Matrix_2.txt");
+                //value3 = ReadTxt.ReadFileTxt("MatrixFinal.txt");
+            }
+        });            
+            return buttonReadMatrix;
         }
     }
 }
