@@ -27,6 +27,9 @@ public class StarterMenu extends JFrame{
     private JPanel finalPanel = new JPanel();
     private SizeMatrixPanel sizeMatrixPanel = new SizeMatrixPanel();
     
+    private ListPanel listPanel = new ListPanel();
+    private Struct_Ejecution struct_Ejecution;
+    
     private int value1[][], value2[][], value3[][];
     private int MATRIX_SIZE = 10;
     
@@ -44,8 +47,9 @@ public class StarterMenu extends JFrame{
         frame = new JFrame();
         this.frame.setTitle("Multiplicador de matrices");
         this.frame.setDefaultCloseOperation(StarterMenu.EXIT_ON_CLOSE);
-        this.frame.setSize(500,120);
+        this.frame.setSize(800,130);
         this.frame.setLocationRelativeTo(null);
+        this.frame.setResizable(false);
         this.frame.setLayout(new BorderLayout(5, 5));
         
         MenuPanel = new JPanel();
@@ -59,7 +63,8 @@ public class StarterMenu extends JFrame{
         
         finalPanel = finalResults.getFinalMenuPanel();
         MenuPanel.add(finalPanel);
-
+        MenuPanel.add(listPanel);
+        
         frame.add(MenuPanel, BorderLayout.NORTH);
         this.frame.setVisible(true);
     }
@@ -107,15 +112,27 @@ public class StarterMenu extends JFrame{
             value3 = Multiplier._multiplier(value1, value2);
             endTime = System.nanoTime();
             System.out.print("\nSecuencial\n\t" + (endTime - startTime));
+            setValuesIntoList(false, (endTime - startTime));
         }
         
-        if (menu.getTypeOf().parallel)
+        if (menu.getTypeOf().concurrent)
         {
             startTime = System.nanoTime();
-            value3 = MultiplierParallel.multiply(value1, value2, menu.getTypeOf().numOfThreads);
+            value3 = MultiplierConcurrent.multiply(value1, value2, menu.getTypeOf().numOfThreads);
             endTime = System.nanoTime();
-            System.out.print("\nParalelo\n\t" + (endTime - startTime));
+            System.out.print("\nConcurrente\n\t" + (endTime - startTime));
+            setValuesIntoList(true, (endTime - startTime));
         }
+    }
+    
+    private void setValuesIntoList(boolean isConcurrent, long time)
+    {
+        struct_Ejecution = new Struct_Ejecution(
+                isConcurrent, 
+                menu.getTypeOf().numOfThreads, 
+                MATRIX_SIZE, time);
+        
+        listPanel._setValues(struct_Ejecution);
     }
 
     public class SizeMatrixPanel extends JPanel {

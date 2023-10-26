@@ -40,7 +40,7 @@ public class FinalResults extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 CreateTxt.CreateFileTxt(value1, "Matrix_1.txt");
                 CreateTxt.CreateFileTxt(value2, "Matrix_2.txt");
-                CreateTxt.CreateFileTxt(value2, "MatrixFinal.txt");
+                CreateTxt.CreateFileTxt(value3, "MatrixFinal.txt");
             }
         });
 

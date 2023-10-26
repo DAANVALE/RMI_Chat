@@ -18,18 +18,23 @@ public class ReadTxt {
             while (scanner.hasNextLine()) {
                 String linea = scanner.nextLine().trim();
                 if (linea.isEmpty()) {
-                    continue; // Ignorar líneas en blanco
+                    continue; 
                 }
 
-                String[] elementos = linea.split("[{},\\s]+"); // Dividir la línea por comas, llaves y espacios
-                int numColumnas = elementos.length - 1; // Restar 1 para excluir el índice
+                String[] elementos = linea.split("[{},\\s]+");
+                int numColumnas = elementos.length - 1;
 
                 if (matriz == null) {
                     matriz = new int[numColumnas][numColumnas];
                 }
 
-                for (int columna = 1; columna <= numColumnas; columna++) {
-                    matriz[fila][columna - 1] = Integer.parseInt(elementos[columna]);
+                for (int columna = 0; columna < numColumnas; columna++) {
+                    matriz[fila][columna] = Integer.parseInt(elementos[columna + 1]);
+                    
+                    if(matriz[fila][columna] != 0)
+                    {
+                        matriz[fila][columna] %= 10;
+                    }
                 }
 
                 fila++;

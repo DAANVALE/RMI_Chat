@@ -33,7 +33,7 @@ public class CreateTxt {
             }
 
             escritor.close();
-            System.out.println("\nEl archivo se ha creado con éxito.");
+            System.out.print("\nEl archivo se ha creado con éxito.");
         } catch (IOException e) {
             e.printStackTrace();
         }

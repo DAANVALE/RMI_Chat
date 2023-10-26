@@ -11,7 +11,7 @@ import javax.swing.event.ChangeListener;
 public class Menu extends JPanel implements ChangeListener{
     
     private JPanel grid = new JPanel();
-    private JCheckBox checkSecuencial, checkParalelo;
+    private JCheckBox checkSecuencial, checkConcurrente;
     private JTextField labelNumThreads;
     private Struct_TypeOfMult typeOf;
     private int MAX_THREADS = Runtime.getRuntime().availableProcessors();
@@ -19,7 +19,7 @@ public class Menu extends JPanel implements ChangeListener{
     public Menu()
     {
         this.checkSecuencial = setCheckButton("secuencial");
-        this.checkParalelo = setCheckButton("paralela");
+        this.checkConcurrente = setCheckButton("concurrente");
         initialize();
     }
     
@@ -31,15 +31,15 @@ public class Menu extends JPanel implements ChangeListener{
         labelNumThreads.setEnabled(false);
         
         grid.add(this.checkSecuencial);
-        grid.add(this.checkParalelo);
+        grid.add(this.checkConcurrente);
         grid.add(this.labelNumThreads);
         setTypeOf();
     }
     
     @Override
     public void stateChanged(ChangeEvent e) {
-        if (e.getSource() == checkParalelo) {
-            if (checkParalelo.isSelected()) {
+        if (e.getSource() == checkConcurrente) {
+            if (checkConcurrente.isSelected()) {
                 labelNumThreads.setEnabled(true);
             } else {
                 labelNumThreads.setEnabled(false);
@@ -55,18 +55,18 @@ public class Menu extends JPanel implements ChangeListener{
         } else {
             typeOf.secuential = false;
         }
-        if (checkParalelo.isSelected()) 
+        if (checkConcurrente.isSelected()) 
         {
-            typeOf.parallel = true;
+            typeOf.concurrent = true;
             labelNumThreads.setEnabled(true);
             setNumThreads();
         } else {
-            typeOf.parallel = false;
+            typeOf.concurrent = false;
             typeOf.numOfThreads = 1;
             labelNumThreads.setEnabled(false);
         }
         
-        if(typeOf.secuential == false && typeOf.parallel == false)
+        if(typeOf.secuential == false && typeOf.concurrent == false)
         {
             typeOf.secuential = true;
             typeOf.numOfThreads = 1;
@@ -82,7 +82,6 @@ public class Menu extends JPanel implements ChangeListener{
             typeOf.numOfThreads = typeOf.numOfThreads < 1 ? 2 : typeOf.numOfThreads;
         }catch (NumberFormatException ex) {
             typeOf.numOfThreads = 2;
-            JOptionPane.showMessageDialog(null," Invalido, seran: " + typeOf.numOfThreads);
         }
     }
     
@@ -109,10 +108,10 @@ public class Menu extends JPanel implements ChangeListener{
     {
         stateChangedAll();
         String secu = typeOf.secuential ? "verdadero" : "falso";
-        String para = typeOf.parallel ? "verdadero" : "falso";
-        String a = "\n secuential is: " + secu + 
-                   "\n Parallel is: " + para +  
-                   "\n Threads:" + typeOf.numOfThreads;
+        String para = typeOf.concurrent ? "verdadero" : "falso";
+        String a = "\n Secuential es: " + secu + 
+                   "\n Concurrente ies: " + para +  
+                   "\n Hilos:" + typeOf.numOfThreads;
         return a;
     }
     
