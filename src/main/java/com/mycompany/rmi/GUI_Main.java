@@ -152,8 +152,8 @@ public class GUI_Main extends javax.swing.JFrame {
     private void btnCLienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCLienteActionPerformed
         
         if(idClient<5){
-            String Ip=JOptionPane.showInputDialog(rootPane, "Connect to: (ip)", "Client", HEIGHT);
-            username=JOptionPane.showInputDialog(rootPane, "Username", "Client", HEIGHT);
+            String Ip=JOptionPane.showInputDialog(null, "Connect to: (ip)", "Client");
+            username=JOptionPane.showInputDialog(null, "Username", "Client");
 
             chatClient=new Chat_Client();
             chatClient.startClient(username, textArea,Ip);
