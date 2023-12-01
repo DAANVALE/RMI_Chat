@@ -9,14 +9,14 @@ import javax.swing.JOptionPane;
  *
  * @author daan
  */
-public class Visual extends javax.swing.JFrame {
+public class GUI_Main extends javax.swing.JFrame {
     Chat_Server chatServer;
     Chat_Client chatClient;
     String username;
     int idClient=0;
     // this.setResizable(false);
     
-    public Visual() throws RemoteException {
+    public GUI_Main() throws RemoteException {
         this.chatServer = new Chat_Server();
         this.chatClient = new Chat_Client();
                 
@@ -185,7 +185,7 @@ public class Visual extends javax.swing.JFrame {
                 System.out.println(idClient-1);
                 cleanTxt();
             } catch (RemoteException ex) {
-                Logger.getLogger(Visual.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Main.class.getName()).log(Level.SEVERE, null, ex);
             }  
         }
 
@@ -199,7 +199,7 @@ public class Visual extends javax.swing.JFrame {
                 chatClient.sendPrivate(username, privateUser, txtMensaje.getText());
                 cleanTxt();
             } catch (RemoteException ex) {
-                Logger.getLogger(Visual.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GUI_Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnPrivadoActionPerformed
@@ -225,23 +225,24 @@ public class Visual extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Visual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Visual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Visual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Visual.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI_Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new Visual().setVisible(true);
+                    new GUI_Main().setVisible(true);
                 } catch (RemoteException ex) {
-                    Logger.getLogger(Visual.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI_Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
