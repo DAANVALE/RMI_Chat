@@ -1,4 +1,4 @@
-package com.mycompany.matrixmultiplier;
+package com.mycompany.matrixmultiplier.Models;
 
 public class Struct_Ejecution {
     public boolean isConcurrent = false;

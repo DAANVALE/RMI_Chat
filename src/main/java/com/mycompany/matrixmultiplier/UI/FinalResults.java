@@ -1,5 +1,6 @@
-package com.mycompany.matrixmultiplier;
+package com.mycompany.matrixmultiplier.UI;
 
+import com.mycompany.matrixmultiplier.CreateTxt;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
@@ -8,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class FinalResults extends JPanel {
+    
     private JButton enviarTxt, mostrar;
     private JPanel finalMenuPanel;
     private int[][] value1, value2, value3;

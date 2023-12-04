@@ -1,5 +1,6 @@
-package com.mycompany.matrixmultiplier;
+package com.mycompany.matrixmultiplier.UI;
 
+import com.mycompany.matrixmultiplier.Models.Struct_TypeOfMult;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;

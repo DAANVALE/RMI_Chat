@@ -1,5 +1,14 @@
 package com.mycompany.matrixmultiplier;
 
+import com.mycompany.matrixmultiplier.Interfaces.IOperations;
+import com.mycompany.matrixmultiplier.Interfaces.IServer;
+import com.mycompany.matrixmultiplier.UI.ListPanel;
+import com.mycompany.matrixmultiplier.UI.Menu;
+import com.mycompany.matrixmultiplier.UI.FinalResults;
+import com.mycompany.matrixmultiplier.Models.Struct_Ejecution;
+
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -7,6 +16,8 @@ import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +27,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class StarterMenu extends JFrame{
+    
+    IServer i_server;
+    Registry rmii;
     
     private JFrame frame;
     private JPanel MenuPanel;
@@ -29,8 +43,9 @@ public class StarterMenu extends JFrame{
     
     private ListPanel listPanel = new ListPanel();
     private Struct_Ejecution struct_Ejecution;
+
+    private int[][] Grid1, Grid2, Grid3;
     
-    private int value1[][], value2[][], value3[][];
     private int MATRIX_SIZE = 10;
     
     private boolean isREADTXTMATRIX = false;
@@ -38,7 +53,21 @@ public class StarterMenu extends JFrame{
     private JButton readMatrix;
     
     public StarterMenu()
-    {
+    { 
+        try{
+            
+            rmii = LocateRegistry.getRegistry("192.168.100.13", 2000);
+            i_server = (IServer) rmii.lookup("Cliente");
+            
+            ClientCallBackImp clientCallback = new ClientCallBackImp();
+            i_server.mensaje();
+            GlobalValues.SetID(i_server.getId() );
+            
+        }catch(Exception e)
+        {
+             e.printStackTrace();
+        }
+        
         initialize();
     }
     
@@ -47,7 +76,7 @@ public class StarterMenu extends JFrame{
         frame = new JFrame();
         this.frame.setTitle("Multiplicador de matrices");
         this.frame.setDefaultCloseOperation(StarterMenu.EXIT_ON_CLOSE);
-        this.frame.setSize(800,130);
+        this.frame.setSize(800,180);
         this.frame.setLocationRelativeTo(null);
         this.frame.setResizable(false);
         this.frame.setLayout(new BorderLayout(5, 5));
@@ -81,7 +110,7 @@ public class StarterMenu extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 IgualizerValues();
                 RUN_Calculation();
-                finalResults.setValues(value1, value2,value3);
+                finalResults.setValues(GlobalValues.Grid1, GlobalValues.Grid2,GlobalValues.Grid3);
                 finalResults.activateShow();
                 JOptionPane.showMessageDialog(null,"Tam: " + MATRIX_SIZE + "\n" +menu.values());
             }
@@ -96,8 +125,8 @@ public class StarterMenu extends JFrame{
         {
             readMatrix.setBackground(null);
             MATRIX_SIZE = sizeMatrixPanel.getSizeMatrix();
-            value1 = RandomiceMatrix.SetValues(MATRIX_SIZE);
-            value2 = RandomiceMatrix.SetValues(MATRIX_SIZE);
+            GlobalValues.SetMatix1(RandomiceMatrix.SetValues(MATRIX_SIZE));
+            GlobalValues.SetMatix2(RandomiceMatrix.SetValues(MATRIX_SIZE));
         }
     }
     
@@ -105,23 +134,36 @@ public class StarterMenu extends JFrame{
     {
         isREADTXTMATRIX = false;
         long startTime = 0, endTime = 0;
-        
-        if(menu.getTypeOf().secuential)
+        try {
+            // Buscar el servicio remoto
+            
+            GlobalValues.SetNumClients(i_server.getId() );
+            System.out.print("ID: " + GlobalValues.ID + " | Total: " + GlobalValues.numClients);
+            
+            Multiplier multiplier = new Multiplier();
+            
+            if(menu.getTypeOf().secuential)
+            {
+                startTime = System.nanoTime();
+                Grid3 = multiplier.secuential(GlobalValues.Grid1, GlobalValues.Grid2);
+                GlobalValues.SetMatix3(Grid3);
+                endTime = System.nanoTime();
+                System.out.print("\nSecuencial\n\t" + (endTime - startTime));
+                setValuesIntoList(false, (endTime - startTime));
+            }
+
+            if (menu.getTypeOf().concurrent)
+            {
+                startTime = System.nanoTime();
+                Grid3 = multiplier.concurrent(GlobalValues.Grid1, GlobalValues.Grid2, menu.getTypeOf().numOfThreads);
+                GlobalValues.SetMatix3(Grid3);
+                endTime = System.nanoTime();
+                System.out.print("\nConcurrente\n\t" + (endTime - startTime));
+                setValuesIntoList(true, (endTime - startTime));
+            }
+        }catch(Exception ex)
         {
-            startTime = System.nanoTime();
-            value3 = Multiplier._multiplier(value1, value2);
-            endTime = System.nanoTime();
-            System.out.print("\nSecuencial\n\t" + (endTime - startTime));
-            setValuesIntoList(false, (endTime - startTime));
-        }
-        
-        if (menu.getTypeOf().concurrent)
-        {
-            startTime = System.nanoTime();
-            value3 = MultiplierConcurrent.multiply(value1, value2, menu.getTypeOf().numOfThreads);
-            endTime = System.nanoTime();
-            System.out.print("\nConcurrente\n\t" + (endTime - startTime));
-            setValuesIntoList(true, (endTime - startTime));
+            ex.printStackTrace();
         }
     }
     
@@ -168,8 +210,10 @@ public class StarterMenu extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 isREADTXTMATRIX = true;
                 readMatrix.setBackground(Color.CYAN);
-                value1 = ReadTxt.ReadFileTxt("Matrix_1.txt");
-                value2 = ReadTxt.ReadFileTxt("Matrix_2.txt");
+                Grid1 = ReadTxt.ReadFileTxt("Matrix_1.txt");
+                GlobalValues.SetMatix1(Grid1);
+                Grid2 = ReadTxt.ReadFileTxt("Matrix_2.txt");
+                GlobalValues.SetMatix2(Grid2);
                 //value3 = ReadTxt.ReadFileTxt("MatrixFinal.txt");
             }
         });            

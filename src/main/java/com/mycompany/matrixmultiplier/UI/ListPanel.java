@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.matrixmultiplier;
+package com.mycompany.matrixmultiplier.UI;
 
+import com.mycompany.matrixmultiplier.Models.Struct_Ejecution;
 import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

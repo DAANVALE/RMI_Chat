@@ -1,4 +1,4 @@
-package com.mycompany.matrixmultiplier;
+package com.mycompany.matrixmultiplier.UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,7 +14,7 @@ import javax.swing.JScrollPane;
 public class MenuGrids extends JFrame {
 
     public MenuGrids(int[][] value1, int[][] value2, int[][] value3) {
-
+        
         this.setTitle("Nuevo JFrame");
         this.setSize(400, 300);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

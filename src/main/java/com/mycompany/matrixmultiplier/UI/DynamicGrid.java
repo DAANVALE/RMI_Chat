@@ -1,4 +1,4 @@
-package com.mycompany.matrixmultiplier;
+package com.mycompany.matrixmultiplier.UI;
 
 import java.awt.Color;
 import java.awt.Font;
