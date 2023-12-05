@@ -23,6 +23,8 @@ public class Multiplier {
     
     public int[][] secuential(int[][] grid1, int[][] grid2)
     {
+        grid1 = GlobalValues.Grid1; 
+        grid2 = GlobalValues.Grid2;
         int[][] grid3 = new int[grid1.length][grid2[0].length];
         
         //System.out.print(" L:" + grid1.length + ": NC:" + GlobalValues.numClients + " : ID" + GlobalValues.numClients);

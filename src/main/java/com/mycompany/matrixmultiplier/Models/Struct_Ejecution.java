@@ -6,7 +6,13 @@ public class Struct_Ejecution {
     public int size;
     public long time;
     
-    public Struct_Ejecution(){}
+    public Struct_Ejecution()
+    {
+        this.isConcurrent = false;
+        this.numOfThreads = 1;
+        this.size = 1;
+        this.time = 1;
+    }
     
     public Struct_Ejecution(boolean isConcurrent, int numOfThreads, int size, long time)
     {

@@ -4,6 +4,7 @@ import com.mycompany.matrixmultiplier.Interfaces.IOperations;
 import com.mycompany.matrixmultiplier.Interfaces.IServer;
 import com.mycompany.matrixmultiplier.Models.Struct_Ejecution;
 import com.mycompany.matrixmultiplier.Models.Struct_TypeOfMult;
+import java.rmi.Remote;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -11,6 +12,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
 
 public class ServerImp extends UnicastRemoteObject implements IServer {
 
@@ -27,9 +29,9 @@ public class ServerImp extends UnicastRemoteObject implements IServer {
     
 
     @Override
-    public void mensaje(IOperations op) throws RemoteException {
+    public void mensaje(Registry rmi, IOperations op) throws RemoteException {
         index++;
-        GlobalValues.addListClients(op, index);
+        GlobalValues.addListClients(rmi, op, index);
     }
 
     @Override
@@ -93,22 +95,6 @@ public class ServerImp extends UnicastRemoteObject implements IServer {
             }
         }
         
-        for (int i = 0; i < Matrix.length; i++) {
-            for (int j = 0; j < Matrix[i].length; j++) {
-                System.out.print(MyMatrixTemp[i][j]);
-
-                // Agregar una coma después de cada elemento, excepto el último en la fila
-                if (j < Matrix[i].length - 1) {
-                    System.out.print(", ");
-                }
-            }
-
-            // Agregar un salto de línea después de cada fila, excepto la última
-            if (i < Matrix.length - 1) {
-                System.out.println();
-            }
-        }
-        
         GlobalValues.SetMatix3(MyMatrixTemp);
     }
 
@@ -140,17 +126,40 @@ public class ServerImp extends UnicastRemoteObject implements IServer {
     Registry rmii;
     
     @Override
-    public void horaDelChambing( int idPatron ) throws RemoteException{
+    public void horaDelChambing( Registry rmii, int idPatron, int[][] grid1, int[][] grid2, int numClients) throws RemoteException{
         try {
 
-            int[][] finalResult = new int[GlobalValues.Grid1.length][GlobalValues.Grid2[0].length];
+            int[][] finalResult = new int[grid1.length][grid1[0].length];
+            
+            System.out.print("Hora de chambear con: " + numClients + "\n");
+            
+            for(int i = 0; i < numClients; i++)
+            {
+                
+//                if(idPatron == i)
+//                {
+//                    continue;
+//                }
+                
+                IOperations clientOp = (IOperations) rmii.lookup("Operations" + i);
 
-            for (int i = 0; i < GlobalValues.numClients; i++) {
+                finalResult = clientOp.multiply(
+                    grid1, 
+                    grid2, 
+                    numClients);
 
-                IOperations clientOp = GlobalValues.opList.get(i);
-                finalResult = clientOp.multiply(GlobalValues.Grid1, GlobalValues.Grid2);
                 setMatrix3(finalResult);
+
+                clientOp.takeResult(finalResult);
             }
+            
+            for(int i = 0; i < numClients; i++)
+            {
+                IOperations clientOp = (IOperations) rmii.lookup("Operations" + i);
+                clientOp.takeResult(GlobalValues.Grid3);
+            }
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

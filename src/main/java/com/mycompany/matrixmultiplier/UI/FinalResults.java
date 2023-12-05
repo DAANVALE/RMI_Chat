@@ -1,6 +1,7 @@
 package com.mycompany.matrixmultiplier.UI;
 
 import com.mycompany.matrixmultiplier.CreateTxt;
+import com.mycompany.matrixmultiplier.GlobalValues;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
@@ -12,15 +13,9 @@ public class FinalResults extends JPanel {
     
     private JButton enviarTxt, mostrar;
     private JPanel finalMenuPanel;
-    private int[][] value1, value2, value3;
     private int size = 0;
     
-    public FinalResults() {
-        initialize();
-    }
-    
-    public FinalResults(int[][] value1, int[][] value2, int[][] value3){
-        setValues(value1, value2, value3);
+    public FinalResults(){
         initialize();
     }
 
@@ -40,9 +35,9 @@ public class FinalResults extends JPanel {
         enviarTxt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CreateTxt.CreateFileTxt(value1, "Matrix_1.txt");
-                CreateTxt.CreateFileTxt(value2, "Matrix_2.txt");
-                CreateTxt.CreateFileTxt(value3, "MatrixFinal.txt");
+                CreateTxt.CreateFileTxt(GlobalValues.Grid1, "Matrix_1.txt");
+                CreateTxt.CreateFileTxt(GlobalValues.Grid2, "Matrix_2.txt");
+                CreateTxt.CreateFileTxt(GlobalValues.Grid3, "MatrixFinal.txt");
             }
         });
 
@@ -53,7 +48,7 @@ public class FinalResults extends JPanel {
                 {
                     if(size < 101)
                     {
-                        MenuGrids newFrame = new MenuGrids(value1, value2, value3);
+                        MenuGrids newFrame = new MenuGrids(GlobalValues.Grid1, GlobalValues.Grid2, GlobalValues.Grid3);
                         newFrame.setVisible(true);
                     }else{
                         JOptionPane.showMessageDialog(null, "Muy Grande mejor metelo a un txt");
@@ -74,13 +69,5 @@ public class FinalResults extends JPanel {
     {
         mostrar.setEnabled(true);
         enviarTxt.setEnabled(true);
-    }
-    
-    public void setValues(int[][] value1, int[][] value2, int[][] value3)
-    {
-        this.value1 = value1;
-        this.value2 = value2;
-        this.value3 = value3;
-        this.size = value3[0].length;
     }
 }

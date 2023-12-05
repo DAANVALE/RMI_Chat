@@ -4,6 +4,7 @@ import com.mycompany.matrixmultiplier.Interfaces.IOperations;
 import com.mycompany.matrixmultiplier.Interfaces.IServer;
 import com.mycompany.matrixmultiplier.Models.Struct_Ejecution;
 import com.mycompany.matrixmultiplier.Models.Struct_TypeOfMult;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -20,10 +21,10 @@ public class GlobalValues {
     public static int[][] Grid2;
     public static int[][] Grid3;
     
-    public static Struct_Ejecution structEjecution;
-    public static Struct_TypeOfMult structTypeOfMult;
+    public static Struct_Ejecution structEjecution = new Struct_Ejecution();
+    public static Struct_TypeOfMult structTypeOfMult = new Struct_TypeOfMult();
     
-    public static ArrayList<IOperations> opList; 
+    public static ArrayList<Operations> opList; 
     
     public static void ChageIP(String newIP)
     {
@@ -65,12 +66,11 @@ public class GlobalValues {
         structTypeOfMult = _structTypeOfMult;
     }
     
-    public static void addListClients(IOperations op, int index)
+    public static void addListClients(Registry rmi, IOperations op, int index)
     {
         try
         {
-            IOperations operation = new Operations();
-            java.rmi.Naming.rebind("rmi://"+GlobalValues.IP+":2000/Operations" + index, operation);
+            rmi.rebind("Operations"+index,op);   
         }
         catch(Exception ex)
         {

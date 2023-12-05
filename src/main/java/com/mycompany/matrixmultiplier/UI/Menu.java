@@ -1,5 +1,6 @@
 package com.mycompany.matrixmultiplier.UI;
 
+import com.mycompany.matrixmultiplier.GlobalValues;
 import com.mycompany.matrixmultiplier.Models.Struct_TypeOfMult;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -72,6 +73,8 @@ public class Menu extends JPanel implements ChangeListener{
             typeOf.secuential = true;
             typeOf.numOfThreads = 1;
         }
+        
+        GlobalValues.SetStruct_TypeOf(typeOf);
     }
     
     public void setNumThreads()

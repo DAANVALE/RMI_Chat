@@ -5,10 +5,11 @@ import com.mycompany.matrixmultiplier.Models.Struct_Ejecution;
 import com.mycompany.matrixmultiplier.Operations;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 
 public interface IServer extends Remote{
     
-    public void mensaje(IOperations op) throws RemoteException;
+    public void mensaje(Registry rmi, IOperations op) throws RemoteException;
     
     public int getId() throws RemoteException;
     public int getNumClients() throws RemoteException;
@@ -28,7 +29,7 @@ public interface IServer extends Remote{
     public void setMatrix3(int[][] Matrix) throws RemoteException;
     public int[][] getMatrix3() throws RemoteException;
     
-    public void horaDelChambing(int idPatron) throws RemoteException;
+    public void horaDelChambing(Registry rmii,int idPatron, int[][] grid1, int[][] grid2, int numClients) throws RemoteException;
     
 }
     

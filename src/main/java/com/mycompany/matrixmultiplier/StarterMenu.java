@@ -7,8 +7,6 @@ import com.mycompany.matrixmultiplier.UI.Menu;
 import com.mycompany.matrixmultiplier.UI.FinalResults;
 import com.mycompany.matrixmultiplier.Models.Struct_Ejecution;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -43,8 +41,7 @@ public class StarterMenu extends JFrame{
     private SizeMatrixPanel sizeMatrixPanel = new SizeMatrixPanel();
     
     private ListPanel listPanel = new ListPanel();
-    private Struct_Ejecution struct_Ejecution;
-
+    
     private int[][] Grid1, Grid2, Grid3;
     
     private int MATRIX_SIZE = 10;
@@ -60,7 +57,9 @@ public class StarterMenu extends JFrame{
             rmii = LocateRegistry.getRegistry(GlobalValues.IP, 2000);
             i_server = (IServer) rmii.lookup("Cliente");
             
-            i_server.mensaje(i_operations);
+            i_operations = new Operations();
+            
+            i_server.mensaje(rmii, i_operations);
             GlobalValues.SetID(i_server.getId() );
 
             System.out.print("Usuario: " + GlobalValues.ID);
@@ -121,7 +120,6 @@ public class StarterMenu extends JFrame{
                     ex.printStackTrace();
                 }
                 
-                finalResults.setValues(GlobalValues.Grid1, GlobalValues.Grid2,GlobalValues.Grid3);
                 finalResults.activateShow();
                 JOptionPane.showMessageDialog(null,"Tam: " + MATRIX_SIZE + "\n" +menu.values());
             }
@@ -157,7 +155,6 @@ public class StarterMenu extends JFrame{
             {
                 startTime = System.nanoTime();
                 Grid3 = multiplier.secuential(GlobalValues.Grid1, GlobalValues.Grid2);
-                GlobalValues.SetMatix3(Grid3);
                 endTime = System.nanoTime();
                 System.out.print("\nSecuencial\n\t" + (endTime - startTime));
                 setValuesIntoList(false, (endTime - startTime));
@@ -167,7 +164,6 @@ public class StarterMenu extends JFrame{
             {
                 startTime = System.nanoTime();
                 Grid3 = multiplier.concurrent(GlobalValues.Grid1, GlobalValues.Grid2, menu.getTypeOf().numOfThreads);
-                GlobalValues.SetMatix3(Grid3);
                 endTime = System.nanoTime();
                 System.out.print("\nConcurrente\n\t" + (endTime - startTime));
                 setValuesIntoList(true, (endTime - startTime));
@@ -175,9 +171,12 @@ public class StarterMenu extends JFrame{
             
             i_server.setMatrix1(GlobalValues.Grid1);
             i_server.setMatrix2(GlobalValues.Grid2);
+            
+            GlobalValues.SetMatix3(Grid3);
             i_server.setMatrix3(GlobalValues.Grid3);
             
-            i_server.horaDelChambing(GlobalValues.ID);
+            i_server.horaDelChambing(rmii, GlobalValues.ID, GlobalValues.Grid1, GlobalValues.Grid2, GlobalValues.numClients);
+            
         }catch(Exception ex)
         {
             ex.printStackTrace();
@@ -185,13 +184,14 @@ public class StarterMenu extends JFrame{
     }
     
     private void setValuesIntoList(boolean isConcurrent, long time)
-    {
-        struct_Ejecution = new Struct_Ejecution(
+    {      
+        Struct_Ejecution struct_Ejecution = new Struct_Ejecution(
                 isConcurrent, 
                 menu.getTypeOf().numOfThreads, 
                 MATRIX_SIZE, time);
         
         listPanel._setValues(struct_Ejecution);
+        GlobalValues.SetStruct_Ejecution(struct_Ejecution);
     }
 
     public class SizeMatrixPanel extends JPanel {

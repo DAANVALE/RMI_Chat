@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 public class ListPanel extends JPanel {
     private DefaultListModel<String> listModel;
     private JList<String> lista;
-    private Struct_Ejecution struct_Ejecution;
     
     public ListPanel() {
         listModel = new DefaultListModel<>();

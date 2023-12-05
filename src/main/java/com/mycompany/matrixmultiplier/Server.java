@@ -46,9 +46,8 @@ public class Server extends JFrame {
             IOperations operation = new Operations();
             
             rmi.rebind("Cliente", serverActions);
-            rmi.rebind("Operation", operation);
 
-            GlobalValues.addListClients(operation, 0);
+            GlobalValues.addListClients(rmi, operation, 0);
             
         } catch (Exception e) {
             e.printStackTrace();
