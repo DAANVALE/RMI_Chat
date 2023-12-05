@@ -3,16 +3,18 @@ package com.mycompany.matrixmultiplier;
 import com.mycompany.matrixmultiplier.Interfaces.IServer;
 import com.mycompany.matrixmultiplier.Interfaces.IOperations;
 
-
 import java.awt.Color;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class Server extends JFrame {
+    
     private JPanel panel = new JPanel();
+    private Registry rmi ;
     
     Server() {
         initComponents();
@@ -35,13 +37,19 @@ public class Server extends JFrame {
         try {
             Conections cx = new Conections();
 
+            GlobalValues.ChageIP(cx.obtenerIP() );
             System.setProperty("java.rmi.server.hostname", GlobalValues.IP);
-            Registry rmi = LocateRegistry.createRegistry(2000);
-            System.out.println("Servidor Activo en: " + cx.obtenerIP());
+            rmi = LocateRegistry.createRegistry(2000);
+            System.out.println("Servidor Activo en: " + GlobalValues.IP);
 
-            IServer serverActions = new ImplementacionServidor();
+            IServer serverActions = new ServerImp();
+            IOperations operation = new Operations();
+            
             rmi.rebind("Cliente", serverActions);
+            rmi.rebind("Operation", operation);
 
+            GlobalValues.addListClients(operation, 0);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

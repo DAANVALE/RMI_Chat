@@ -30,6 +30,7 @@ public class StarterMenu extends JFrame{
     
     IServer i_server;
     Registry rmii;
+    IOperations i_operations;
     
     private JFrame frame;
     private JPanel MenuPanel;
@@ -56,12 +57,13 @@ public class StarterMenu extends JFrame{
     { 
         try{
             
-            rmii = LocateRegistry.getRegistry("192.168.100.13", 2000);
+            rmii = LocateRegistry.getRegistry(GlobalValues.IP, 2000);
             i_server = (IServer) rmii.lookup("Cliente");
             
-            ClientCallBackImp clientCallback = new ClientCallBackImp();
-            i_server.mensaje();
+            i_server.mensaje(i_operations);
             GlobalValues.SetID(i_server.getId() );
+
+            System.out.print("Usuario: " + GlobalValues.ID);
             
         }catch(Exception e)
         {
@@ -110,6 +112,15 @@ public class StarterMenu extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 IgualizerValues();
                 RUN_Calculation();
+                
+                try
+                {
+                     GlobalValues.SetMatix3(i_server.getMatrix3());
+                }catch(Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+                
                 finalResults.setValues(GlobalValues.Grid1, GlobalValues.Grid2,GlobalValues.Grid3);
                 finalResults.activateShow();
                 JOptionPane.showMessageDialog(null,"Tam: " + MATRIX_SIZE + "\n" +menu.values());
@@ -161,6 +172,12 @@ public class StarterMenu extends JFrame{
                 System.out.print("\nConcurrente\n\t" + (endTime - startTime));
                 setValuesIntoList(true, (endTime - startTime));
             }
+            
+            i_server.setMatrix1(GlobalValues.Grid1);
+            i_server.setMatrix2(GlobalValues.Grid2);
+            i_server.setMatrix3(GlobalValues.Grid3);
+            
+            i_server.horaDelChambing(GlobalValues.ID);
         }catch(Exception ex)
         {
             ex.printStackTrace();

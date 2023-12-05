@@ -25,7 +25,7 @@ public class Multiplier {
     {
         int[][] grid3 = new int[grid1.length][grid2[0].length];
         
-        System.out.print(" L:" + grid1.length + ": NC:" + GlobalValues.numClients);
+        //System.out.print(" L:" + grid1.length + ": NC:" + GlobalValues.numClients + " : ID" + GlobalValues.numClients);
         
         getStartFinalRows(grid1.length);
         
@@ -51,7 +51,7 @@ public class Multiplier {
 
         ExecutorService executorService = Executors.newFixedThreadPool(numOfThreads);
         
-        System.out.print(" L:" + grid1.length + ": NC:" + GlobalValues.numClients);
+        //System.out.print(" L:" + grid1.length + ": NC:" + GlobalValues.numClients + " : ID" + GlobalValues.numClients);
         
         getStartFinalRows(grid1.length);
         
@@ -100,7 +100,7 @@ public class Multiplier {
             startRow = start;
             finalRow = start + RPC - 1 + extra;
             
-            if(GlobalValues.ID == i)
+            if((GlobalValues.ID - 1) == i)
             {
                 return;
             }

@@ -1,6 +1,5 @@
 package com.mycompany.matrixmultiplier;
 
-import com.mycompany.matrixmultiplier.Interfaces.IClientCallBack;
 import java.net.MalformedURLException;
 
 import java.rmi.Naming;
