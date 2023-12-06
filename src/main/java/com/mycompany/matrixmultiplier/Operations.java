@@ -41,7 +41,7 @@ public class Operations extends UnicastRemoteObject implements IOperations{
     }
 
     @Override
-    public int[][] multiply(int[][] matrix1, int[][] matrix2, int numClients) throws RemoteException {
+    public int[][] multiply(int[][] matrix1, int[][] matrix2, int numClients, boolean isConcurrent) throws RemoteException {
         
         GlobalValues.SetNumClients(numClients);
         
@@ -53,7 +53,7 @@ public class Operations extends UnicastRemoteObject implements IOperations{
         Multiplier multiplier = new Multiplier();
         long startTime = 0, endTime = 0;
         
-        if(true)
+        if(!isConcurrent)
         {
             startTime = System.nanoTime();
             Grid3 = multiplier.secuential(GlobalValues.Grid1, GlobalValues.Grid2);
@@ -62,7 +62,7 @@ public class Operations extends UnicastRemoteObject implements IOperations{
             System.out.print("\nSecuencial\n\t" + (endTime - startTime));
         }
 
-        if (false)
+        if (isConcurrent)
         {
             startTime = System.nanoTime();
             Grid3 = multiplier.concurrent(GlobalValues.Grid1, GlobalValues.Grid2, 4);

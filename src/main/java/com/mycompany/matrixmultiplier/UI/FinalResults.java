@@ -46,7 +46,7 @@ public class FinalResults extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try
                 {
-                    if(size < 101)
+                    if(GlobalValues.Grid1.length < 101)
                     {
                         MenuGrids newFrame = new MenuGrids(GlobalValues.Grid1, GlobalValues.Grid2, GlobalValues.Grid3);
                         newFrame.setVisible(true);

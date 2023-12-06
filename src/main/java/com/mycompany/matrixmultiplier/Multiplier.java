@@ -33,6 +33,7 @@ public class Multiplier {
         
         for (int i = startRow; i <= finalRow; i++) 
         {
+            //viendoChambing();
             final int row = i;
             for (int j = 0; j < grid2[0].length; j++) 
             {
@@ -61,6 +62,7 @@ public class Multiplier {
             List<Callable<Void>> tasks = new ArrayList<>();
 
             for (int i = startRow; i <= finalRow; i++) {
+                //viendoChambing();
                 final int row = i;
                 Callable<Void> task = () -> {
                     for (int j = 0; j < grid2[0].length; j++) {
@@ -109,5 +111,14 @@ public class Multiplier {
             
             start = finalRow + 1;
         }
+    }
+    
+    public void viendoChambing() {
+        GlobalValues.addChambing();
+        
+        int corridas = GlobalValues.Grid1.length * GlobalValues.numClients ;
+        
+        float percentaje = GlobalValues.chambing / corridas * 100;
+        System.out.print("\n\t" + percentaje + "%");
     }
 }

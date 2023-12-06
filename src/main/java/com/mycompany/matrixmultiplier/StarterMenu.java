@@ -149,33 +149,51 @@ public class StarterMenu extends JFrame{
             GlobalValues.SetNumClients(i_server.getId() );
             System.out.print("ID: " + GlobalValues.ID + " | Total: " + GlobalValues.numClients);
             
-            Multiplier multiplier = new Multiplier();
+//            Multiplier multiplier = new Multiplier();
+//            
+//            if(menu.getTypeOf().secuential)
+//            {
+//                startTime = System.nanoTime();
+//                Grid3 = multiplier.secuential(GlobalValues.Grid1, GlobalValues.Grid2);
+//                endTime = System.nanoTime();
+//                System.out.print("\nSecuencial\n\t" + (endTime - startTime));
+//                setValuesIntoList(false, (endTime - startTime));
+//            }
+//
+//            if (menu.getTypeOf().concurrent)
+//            {
+//                startTime = System.nanoTime();
+//                Grid3 = multiplier.concurrent(GlobalValues.Grid1, GlobalValues.Grid2, menu.getTypeOf().numOfThreads);
+//                endTime = System.nanoTime();
+//                System.out.print("\nConcurrente\n\t" + (endTime - startTime));
+//                setValuesIntoList(true, (endTime - startTime));
+//            }
             
-            if(menu.getTypeOf().secuential)
-            {
-                startTime = System.nanoTime();
-                Grid3 = multiplier.secuential(GlobalValues.Grid1, GlobalValues.Grid2);
-                endTime = System.nanoTime();
-                System.out.print("\nSecuencial\n\t" + (endTime - startTime));
-                setValuesIntoList(false, (endTime - startTime));
-            }
+            
+            boolean isConcurrent = menu.getTypeOf().concurrent;
 
-            if (menu.getTypeOf().concurrent)
-            {
-                startTime = System.nanoTime();
-                Grid3 = multiplier.concurrent(GlobalValues.Grid1, GlobalValues.Grid2, menu.getTypeOf().numOfThreads);
-                endTime = System.nanoTime();
-                System.out.print("\nConcurrente\n\t" + (endTime - startTime));
-                setValuesIntoList(true, (endTime - startTime));
-            }
+            Grid3 = new int[GlobalValues.Grid1.length][GlobalValues.Grid2.length];
             
             i_server.setMatrix1(GlobalValues.Grid1);
             i_server.setMatrix2(GlobalValues.Grid2);
-            
+                        
             GlobalValues.SetMatix3(Grid3);
             i_server.setMatrix3(GlobalValues.Grid3);
             
-            i_server.horaDelChambing(rmii, GlobalValues.ID, GlobalValues.Grid1, GlobalValues.Grid2, GlobalValues.numClients);
+            startTime = System.nanoTime();
+            i_server.horaDelChambing(rmii, GlobalValues.ID, GlobalValues.Grid1, GlobalValues.Grid2, GlobalValues.numClients, isConcurrent);
+            endTime = System.nanoTime();
+            
+            if(!isConcurrent) 
+            {
+                System.out.print("\nSecuencial\n\t" + (endTime - startTime));
+            }
+            
+            if (isConcurrent){
+                System.out.print("\nConcurrent\n\t" + (endTime - startTime));
+            }            
+            
+            setValuesIntoList(isConcurrent, (endTime - startTime));
             
         }catch(Exception ex)
         {

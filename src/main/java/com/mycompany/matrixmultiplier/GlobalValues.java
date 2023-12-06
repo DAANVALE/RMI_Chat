@@ -26,6 +26,8 @@ public class GlobalValues {
     
     public static ArrayList<Operations> opList; 
     
+    public static int chambing;
+    
     public static void ChageIP(String newIP)
     {
         IP = newIP;
@@ -76,6 +78,11 @@ public class GlobalValues {
         {
             ex.printStackTrace();
         }
+    }
+    
+    public static void addChambing()
+    {
+        chambing++;
     }
     
 }

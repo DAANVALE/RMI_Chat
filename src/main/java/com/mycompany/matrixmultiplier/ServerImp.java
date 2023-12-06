@@ -12,6 +12,10 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import javax.swing.SwingUtilities;
 
 public class ServerImp extends UnicastRemoteObject implements IServer {
@@ -126,39 +130,64 @@ public class ServerImp extends UnicastRemoteObject implements IServer {
     Registry rmii;
     
     @Override
-    public void horaDelChambing( Registry rmii, int idPatron, int[][] grid1, int[][] grid2, int numClients) throws RemoteException{
+    public void horaDelChambing( Registry rmii, int idPatron, int[][] grid1, int[][] grid2, int numClients, boolean isConcurrent) throws RemoteException{
         try {
 
             int[][] finalResult = new int[grid1.length][grid1[0].length];
             
             System.out.print("Hora de chambear con: " + numClients + "\n");
             
+            ExecutorService executorService = Executors.newFixedThreadPool(4);
+            
+            try {
+                
+            List<Callable<Void>> tasks = new ArrayList<>();
+
             for(int i = 0; i < numClients; i++)
             {
-                
+
 //                if(idPatron == i)
 //                {
 //                    continue;
 //                }
+                        
+                IOperations clientOp = (IOperations) rmii.lookup("Operations" + i);
+
+                Callable<Void> task = () -> {
+                    
+                        int[][] finalResults = clientOp.multiply(
+                        grid1, 
+                        grid2, 
+                        numClients,
+                        isConcurrent);
+
+                    setMatrix3(finalResults);
+                    clientOp.takeResult(finalResults);
+                    return null;
+                };
                 
-                IOperations clientOp = (IOperations) rmii.lookup("Operations" + i);
-
-                finalResult = clientOp.multiply(
-                    grid1, 
-                    grid2, 
-                    numClients);
-
-                setMatrix3(finalResult);
-
-                clientOp.takeResult(finalResult);
+                tasks.add(task);
+                
             }
+
+                List<Future<Void>> futures = executorService.invokeAll(tasks);
+
+                for (Future<Void> future : futures) {
+                    
+                    for(int i = 0; i < numClients; i++)
+                    {
+                        IOperations clientOp = (IOperations) rmii.lookup("Operations" + i);
+                        clientOp.takeResult(GlobalValues.Grid3);
+                    }
+                    
+                    future.get();
+                    
+                    
+                }
             
-            for(int i = 0; i < numClients; i++)
-            {
-                IOperations clientOp = (IOperations) rmii.lookup("Operations" + i);
-                clientOp.takeResult(GlobalValues.Grid3);
-            }
-            
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }          
             
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface IOperations extends Remote{
     
-    public int[][] multiply(int[][] matrix1, int[][] matrix2, int numClients) throws RemoteException;
+    public int[][] multiply(int[][] matrix1, int[][] matrix2, int numClients, boolean isConcurrent) throws RemoteException;
     
     public void takeValues() throws RemoteException;
     public void takeResult(int [][] mtx3) throws RemoteException;

@@ -29,7 +29,6 @@ public interface IServer extends Remote{
     public void setMatrix3(int[][] Matrix) throws RemoteException;
     public int[][] getMatrix3() throws RemoteException;
     
-    public void horaDelChambing(Registry rmii,int idPatron, int[][] grid1, int[][] grid2, int numClients) throws RemoteException;
-    
+    public void horaDelChambing(Registry rmii,int idPatron, int[][] grid1, int[][] grid2, int numClients, boolean isConcurrent) throws RemoteException;
 }
     
